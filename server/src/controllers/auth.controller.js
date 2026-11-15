@@ -4,7 +4,7 @@ import User from "../models/User.js";
 const cookieOptions = () => ({
   httpOnly: true,
   secure: true,
-  sameSite: "none",
+  sameSite: "lax",
   maxAge: 7 * 24 * 60 * 60 * 1000,
   path: "/"
 });
@@ -87,7 +87,7 @@ export async function logout(_req, res) {
   res.clearCookie("token", {
     httpOnly: true,
     secure: true,
-    sameSite: "none",
+    sameSite: "lax",
     path: "/"
   });
 
