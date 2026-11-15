@@ -3,8 +3,8 @@ import User from "../models/User.js";
 
 const cookieOptions = () => ({
   httpOnly: true,
-  secure: process.env.NODE_ENV === "production",
-  sameSite: "lax",
+  secure: true,
+  sameSite: "none",
   maxAge: 7 * 24 * 60 * 60 * 1000,
   path: "/"
 });
@@ -40,17 +40,23 @@ export async function register(req, res) {
     });
   }
 
-  if (await User.exists({ email: String(email).toLowerCase() })) {
+  const normalizedEmail = String(email).trim().toLowerCase();
+
+  if (await User.exists({ email: normalizedEmail })) {
     return res.status(409).json({
       message: "An account with that email already exists"
     });
   }
 
-  const user = await User.create({ name, email, password });
+  const user = await User.create({
+    name: String(name).trim(),
+    email: normalizedEmail,
+    password
+  });
 
   res.cookie("token", token(user), cookieOptions());
 
-  res.status(201).json({
+  return res.status(201).json({
     user: safe(user)
   });
 }
@@ -58,8 +64,10 @@ export async function register(req, res) {
 export async function login(req, res) {
   const { email, password } = req.body || {};
 
+  const normalizedEmail = String(email || "").trim().toLowerCase();
+
   const user = await User.findOne({
-    email: String(email || "").toLowerCase()
+    email: normalizedEmail
   }).select("+password");
 
   if (!user || !await user.comparePassword(String(password || ""))) {
@@ -70,7 +78,7 @@ export async function login(req, res) {
 
   res.cookie("token", token(user), cookieOptions());
 
-  res.json({
+  return res.status(200).json({
     user: safe(user)
   });
 }
@@ -78,18 +86,18 @@ export async function login(req, res) {
 export async function logout(_req, res) {
   res.clearCookie("token", {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
+    secure: true,
+    sameSite: "none",
     path: "/"
   });
 
-  res.json({
+  return res.json({
     message: "Signed out"
   });
 }
 
 export function me(req, res) {
-  res.json({
+  return res.json({
     user: safe(req.user)
   });
 }
