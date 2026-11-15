@@ -1,0 +1,4 @@
+import { createContext, useContext, useEffect, useState } from 'react'
+import { api } from '../services/api.js'
+const C=createContext(null);export const useAuth=()=>useContext(C)
+export function AuthProvider({children}){const [user,setUser]=useState(null),[loading,setLoading]=useState(true);useEffect(()=>{api('/auth/me').then(d=>setUser(d.user)).catch(()=>setUser(null)).finally(()=>setLoading(false))},[]);const login=async(email,password)=>{const d=await api('/auth/login',{method:'POST',body:{email,password}});setUser(d.user);return d.user};const register=async(name,email,password)=>{const d=await api('/auth/register',{method:'POST',body:{name,email,password}});setUser(d.user);return d.user};const logout=async()=>{await api('/auth/logout',{method:'POST'});setUser(null)};return <C.Provider value={{user,loading,login,register,logout}}>{children}</C.Provider>}

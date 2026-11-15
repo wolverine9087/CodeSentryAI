@@ -1,0 +1,1 @@
+export default function Sidebar({navigate,active='/'}){return <aside className="panel" style={{width:210,alignSelf:'start'}}><button className="nav-link" onClick={()=>navigate('/')}>Projects</button><button className="nav-link" onClick={()=>navigate('/history')}>Review history</button></aside>}

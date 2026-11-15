@@ -1,0 +1,1 @@
+export default function SeverityBadge({severity='low'}){const level=String(severity).toLowerCase();return <span className={`severity ${['critical','high','medium','low'].includes(level)?level:'low'}`}>{level.toUpperCase()}</span>}

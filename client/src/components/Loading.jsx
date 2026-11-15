@@ -1,0 +1,1 @@
+export default function Loading({label='Analyzing code�'}){return <div style={{padding:28,textAlign:'center',color:'var(--muted)'}}><div className="progress"><span style={{width:'70%'}}/></div><p style={{marginTop:12}}>{label}</p></div>}

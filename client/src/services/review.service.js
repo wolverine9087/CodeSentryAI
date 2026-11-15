@@ -1,0 +1,1 @@
+import { api } from './api.js';export const reviewService={projects:()=>api('/projects'),createProject:(body)=>api('/projects',{method:'POST',body}),getProject:(id)=>api(`/projects/${id}`),deleteProject:(id)=>api(`/projects/${id}`,{method:'DELETE'}),history:()=>api('/reviews'),run:(id,body)=>api(`/reviews/${id}`,{method:'POST',body}),get:(id)=>api(`/reviews/${id}`)}

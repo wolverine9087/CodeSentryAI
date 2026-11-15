@@ -1,0 +1,1 @@
+export default function CodeEditor({value,onChange}){return <textarea className="editor" spellCheck="false" value={value} onChange={e=>onChange(e.target.value)} placeholder={'// Paste code here\nfunction example() {\n  return "Ready for review";\n}'}/>}
