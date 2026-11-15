@@ -1,3 +1,33 @@
-const BASE=import.meta.env.VITE_API_URL||'/api';
+const BASE = '/api';
+
 console.log("API BASE URL:", BASE);
-export async function api(path,options={}){const init={method:options.method||'GET',credentials:'include',headers:{...(options.body&&!(options.body instanceof FormData)?{'Content-Type':'application/json'}:{}),...options.headers}};if(options.body)init.body=options.body instanceof FormData?options.body:JSON.stringify(options.body);const res=await fetch(`${BASE}${path}`,init);const data=await res.json().catch(()=>({message:'Unexpected server response'}));if(!res.ok)throw new Error(data.message||'Request failed');return data}
+
+export async function api(path, options = {}) {
+  const init = {
+    method: options.method || 'GET',
+    credentials: 'include',
+    headers: {
+      ...(options.body && !(options.body instanceof FormData)
+        ? { 'Content-Type': 'application/json' }
+        : {}),
+      ...options.headers
+    }
+  };
+
+  if (options.body) {
+    init.body = options.body instanceof FormData
+      ? options.body
+      : JSON.stringify(options.body);
+  }
+
+  const res = await fetch(`${BASE}${path}`, init);
+  const data = await res.json().catch(() => ({
+    message: 'Unexpected server response'
+  }));
+
+  if (!res.ok) {
+    throw new Error(data.message || 'Request failed');
+  }
+
+  return data;
+}
